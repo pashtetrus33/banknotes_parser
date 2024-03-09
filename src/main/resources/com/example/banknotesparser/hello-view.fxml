@@ -14,35 +14,51 @@
     </padding>
    <AnchorPane prefHeight="768.0" prefWidth="496.0">
       <children>
-         <TextField fx:id="inputField" layoutX="-1.0" layoutY="6.0" prefHeight="30.0" prefWidth="477.0" promptText="Введите числа через запятую">
+         <TextField fx:id="inputField" layoutY="37.0" prefHeight="30.0" prefWidth="477.0" promptText="Введите числа через запятую">
             <font>
                <Font name="System Bold" size="14.0" />
             </font></TextField>
-         <TextArea fx:id="outputField" layoutX="-1.0" layoutY="45.0" prefHeight="443.0" prefWidth="477.0" promptText="Вывод">
+         <TextArea fx:id="outputField" editable="false" layoutX="-1.0" layoutY="73.0" prefHeight="401.0" prefWidth="477.0" promptText="Вывод">
             <font>
                <Font name="System Bold Italic" size="14.0" />
             </font></TextArea>
-         <TextArea fx:id="counterField" layoutY="492.0" prefHeight="121.0" prefWidth="477.0" promptText="Итого">
+         <TextArea fx:id="counterField" editable="false" layoutY="479.0" prefHeight="127.0" prefWidth="477.0" promptText="Итого по номиналу купюры">
             <font>
                <Font name="System Bold" size="14.0" />
             </font></TextArea>
-          <Button layoutX="35.0" layoutY="682.0" onAction="#onHelloButtonClick" prefHeight="51.0" prefWidth="182.0" text="Расчет" />
+          <Button layoutX="35.0" layoutY="682.0" onAction="#onProcessButtonClick" prefHeight="51.0" prefWidth="182.0" text="Расчет" />
          <Button layoutX="258.0" layoutY="682.0" onAction="#onResetButtonClick" prefHeight="51.0" prefWidth="182.0" text="Сброс" />
-         <TextArea id="expectedField" fx:id="expectedField" layoutX="35.0" layoutY="624.0" prefHeight="24.0" prefWidth="157.0" promptText="Expected">
+         <TextArea id="testResultField" fx:id="testResultField" editable="false" layoutX="213.0" layoutY="624.0" prefHeight="18.0" prefWidth="49.0">
             <font>
                <Font name="System Bold" size="14.0" />
             </font>
          </TextArea>
-         <TextArea id="actualField" fx:id="actualField" layoutX="283.0" layoutY="624.0" prefHeight="24.0" prefWidth="157.0" promptText="Actual">
+         <TextField fx:id="expectedSizeField" editable="false" layoutX="48.0" layoutY="612.0" prefHeight="30.0" prefWidth="156.0" promptText="Кол-во чисел">
             <font>
                <Font name="System Bold" size="14.0" />
             </font>
-         </TextArea>
-         <TextArea id="testResultField" fx:id="testResultField" layoutX="213.0" layoutY="624.0" prefHeight="46.0" prefWidth="49.0">
+         </TextField>
+         <TextField fx:id="expectedField" editable="false" layoutX="48.0" layoutY="646.0" prefHeight="30.0" prefWidth="156.0" promptText="Итого $">
             <font>
                <Font name="System Bold" size="14.0" />
             </font>
-         </TextArea>
+         </TextField>
+         <TextField fx:id="actualSizeField" editable="false" layoutX="271.0" layoutY="612.0" prefHeight="30.0" prefWidth="156.0" promptText="Кол-во чисел акт.">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </TextField>
+         <TextField fx:id="actualField" editable="false" layoutX="271.0" layoutY="646.0" prefHeight="30.0" prefWidth="156.0" promptText="Итого $ акт.">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </TextField>
+         <TextField fx:id="dataField" alignment="BASELINE_CENTER" editable="false" layoutX="127.0" layoutY="-3.0" prefHeight="15.0" prefWidth="204.0" style="-fx-background-color: transparent;">
+            <font>
+               <Font name="Tahoma Bold" size="14.0" />
+            </font>
+         </TextField>
+         <Button layoutX="414.0" layoutY="5.0" onAction="#createPdfFromScene" prefHeight="20.0" prefWidth="63.0" text="pdf" />
       </children>
    </AnchorPane>
 </VBox>

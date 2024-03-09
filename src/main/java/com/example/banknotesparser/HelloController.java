@@ -1,13 +1,27 @@
 package com.example.banknotesparser;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.WritableImage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.example.banknotesparser.HelloApplication.scene;
 
 public class HelloController {
 
@@ -19,31 +33,47 @@ public class HelloController {
 
     @FXML
     private TextArea counterField;
+    @FXML
+    private TextField expectedSizeField;
 
     @FXML
-    private TextArea expectedField;
+    private TextField expectedField;
+
     @FXML
-    private TextArea actualField;
+    private TextField actualSizeField;
+
+    @FXML
+    private TextField actualField;
     @FXML
     private TextArea testResultField;
 
-    int counter50 = 0;
-    int counter20 = 0;
-    int counter10 = 0;
-    int counter5 = 0;
-    int counter1 = 0;
+    @FXML
+    private TextField dataField;
+
+    AtomicInteger counter50 = new AtomicInteger();
+    AtomicInteger counter20 = new AtomicInteger();
+    AtomicInteger counter10 = new AtomicInteger();
+    AtomicInteger counter5 = new AtomicInteger();
+    AtomicInteger counter1 = new AtomicInteger();
+    AtomicInteger numbersCounter = new AtomicInteger();
+
+    public void initialize() {
+
+        // Создаем форматтер для указанного формата "день месяц год часы минуты"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm");
+
+        // Форматируем дату и время с помощью форматтера
+        dataField.setText(LocalDateTime.now().format(formatter));
+        dataField.setStyle("-fx-background-color: transparent; -fx-text-fill: blue");
+    }
 
     @FXML
-    protected void onHelloButtonClick() {
+    protected void onProcessButtonClick() {
 
-        AtomicInteger counter50 = new AtomicInteger();
-        AtomicInteger counter20 = new AtomicInteger();
-        AtomicInteger counter10 = new AtomicInteger();
-        AtomicInteger counter5 = new AtomicInteger();
-        AtomicInteger counter1 = new AtomicInteger();
 
         StringBuilder stringBuilder = new StringBuilder();
         List<Integer> integerList;
+
 
         try {
             testResultField.setStyle("");
@@ -51,6 +81,15 @@ public class HelloController {
             expectedField.clear();
             outputField.clear();
             counterField.clear();
+            actualSizeField.clear();
+            expectedSizeField.clear();
+
+            counter50.set(0);
+            counter20.set(0);
+            counter10.set(0);
+            counter5.set(0);
+            counter1.set(0);
+            numbersCounter.set(1);
 
             integerList = Arrays.asList(inputField.getText().split(",")).stream()
                     .map(Integer::parseInt)
@@ -60,20 +99,32 @@ public class HelloController {
                     .mapToInt(Integer::intValue)
                     .sum();
 
+            expectedSizeField.setText("Кол-во чисел: " + integerList.size());
             expectedField.setText("Ожидается $: " + expected);
+
 
             Thread thread = new Thread(() -> {
                 for (Integer num : integerList) {
 
                     if (num >= 100 || num <= 0) {
                         stringBuilder.append("Некорректное значение. Требование: больше нуля и меньше 100!\n");
+                        outputField.setText(stringBuilder.toString());
                         continue;
                     }
-                    if (num >= 10) {
-                        stringBuilder.append("Число: $").append(num).append("  ->  ");
+                    if (numbersCounter.get() <= 9) {
+                        if (num >= 10) {
+                            stringBuilder.append("  " + numbersCounter + ") Число: $").append(num).append("  ->  ");
+                        } else {
+                            stringBuilder.append("  " + numbersCounter + ") Число: $").append(num).append("    ->  ");
+                        }
                     } else {
-                        stringBuilder.append("Число: $").append(num).append("    ->  ");
+                        if (num >= 10) {
+                            stringBuilder.append(numbersCounter + ") Число: $").append(num).append("  ->  ");
+                        } else {
+                            stringBuilder.append(numbersCounter + ") Число: $").append(num).append("    ->  ");
+                        }
                     }
+
 
                     if (num >= 50) {
                         stringBuilder.append("$50: 1  ");
@@ -113,9 +164,13 @@ public class HelloController {
                     stringBuilder.append("$1: ").append(num).append("\n");
                     counter1.addAndGet(num);
 
-                    Platform.runLater(() -> outputField.setText(stringBuilder.toString()));
+                    Platform.runLater(() -> {
+                        outputField.setText(stringBuilder.toString());
+
+                        actualSizeField.setText("Распарсено: " + numbersCounter.getAndIncrement());
+                    });
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
@@ -125,7 +180,7 @@ public class HelloController {
                         counter10.get() * 10 + counter5.get() * 5 + counter1.get();
                 actualField.setText("Итого $: " + actual);
 
-                if (expected == actual) {
+                if ((expected == actual) && (integerList.size() == numbersCounter.get() - 1)) {
                     testResultField.setStyle("-fx-control-inner-background: #00FF00;");
                 } else {
                     testResultField.setStyle("-fx-control-inner-background: #FF0000;");
@@ -154,10 +209,44 @@ public class HelloController {
         testResultField.setStyle("");
         actualField.clear();
         expectedField.clear();
-        counter50 = 0;
-        counter20 = 0;
-        counter10 = 0;
-        counter5 = 0;
-        counter1 = 0;
+        actualSizeField.clear();
+        expectedSizeField.clear();
+        counter50.set(0);
+        counter20.set(0);
+        counter10.set(0);
+        counter5.set(0);
+        counter1.set(0);
+        numbersCounter.set(1);
+    }
+
+    // Метод для создания PDF-документа на основе сцены
+    @FXML
+    protected void createPdfFromScene() {
+
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage();
+            document.addPage(page);
+
+            // Создание WritableImage из сцены
+            WritableImage writableImage = new WritableImage((int) scene.getWidth(), (int) scene.getHeight());
+            scene.snapshot(writableImage);
+
+            // Создание объекта PDImageXObject из изображения
+            PDImageXObject pdImage = LosslessFactory.createFromImage(document, SwingFXUtils.fromFXImage(writableImage, null));
+
+            // Добавление изображения на страницу PDF
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                contentStream.drawImage(pdImage, 0, 0, pdImage.getWidth(), pdImage.getHeight());
+            }
+            // Сохранение PDF-документа
+
+            // Создаем форматтер для указанного формата "день месяц год часы минуты"
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH-mm-ss");
+
+            // Форматируем дату и время с помощью форматтера
+            document.save(LocalDateTime.now().format(formatter) + ".pdf");
+        } catch (IOException e) {
+            outputField.setText(e.toString());
+        }
     }
 }

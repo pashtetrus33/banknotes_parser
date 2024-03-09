@@ -8,10 +8,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
+
+    public static Scene scene;
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load());
+        scene = new Scene(fxmlLoader.load());
         stage.setTitle("Banknotes parser");
         stage.setScene(scene);
         stage.show();
