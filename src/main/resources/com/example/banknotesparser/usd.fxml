@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="762.0" prefWidth="517.0" spacing="20.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.banknotesparser.UsdController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <AnchorPane prefHeight="768.0" prefWidth="496.0">
+      <children>
+         <TextField fx:id="inputField" layoutY="37.0" prefHeight="30.0" prefWidth="477.0" promptText="Введите числа через запятую">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font></TextField>
+         <TextArea fx:id="outputField" editable="false" layoutX="-1.0" layoutY="73.0" prefHeight="401.0" prefWidth="477.0" promptText="Вывод">
+            <font>
+               <Font name="System Bold Italic" size="14.0" />
+            </font></TextArea>
+         <TextArea fx:id="counterField" editable="false" layoutY="479.0" prefHeight="127.0" prefWidth="477.0" promptText="Итого по номиналу купюры">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font></TextArea>
+          <Button layoutX="35.0" layoutY="682.0" onAction="#onProcessButtonClick" prefHeight="51.0" prefWidth="182.0" text="Расчет" />
+         <Button layoutX="258.0" layoutY="682.0" onAction="#onResetButtonClick" prefHeight="51.0" prefWidth="182.0" text="Сброс" />
+         <TextArea id="testResultField" fx:id="testResultField" editable="false" layoutX="213.0" layoutY="624.0" prefHeight="18.0" prefWidth="49.0">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </TextArea>
+         <TextField fx:id="expectedSizeField" editable="false" layoutX="48.0" layoutY="612.0" prefHeight="30.0" prefWidth="156.0" promptText="Кол-во чисел">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </TextField>
+         <TextField fx:id="expectedField" editable="false" layoutX="48.0" layoutY="646.0" prefHeight="30.0" prefWidth="156.0" promptText="Итого $">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </TextField>
+         <TextField fx:id="actualSizeField" editable="false" layoutX="271.0" layoutY="612.0" prefHeight="30.0" prefWidth="156.0" promptText="Кол-во чисел акт.">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </TextField>
+         <TextField fx:id="actualField" editable="false" layoutX="271.0" layoutY="646.0" prefHeight="30.0" prefWidth="156.0" promptText="Итого $ акт.">
+            <font>
+               <Font name="System Bold" size="14.0" />
+            </font>
+         </TextField>
+         <TextField fx:id="dataField" alignment="BASELINE_CENTER" editable="false" layoutX="127.0" layoutY="-3.0" prefHeight="15.0" prefWidth="204.0" style="-fx-background-color: transparent;">
+            <font>
+               <Font name="Tahoma Bold" size="14.0" />
+            </font>
+         </TextField>
+         <Button layoutX="414.0" layoutY="5.0" onAction="#createPdfFromScene" prefHeight="20.0" prefWidth="63.0" text="pdf" />
+         <Button layoutX="27.0" layoutY="7.0" onAction="#switchToCLP" prefHeight="20.0" prefWidth="63.0" text="CLP" />
+      </children>
+   </AnchorPane>
+</VBox>
